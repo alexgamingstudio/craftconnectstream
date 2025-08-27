@@ -1,117 +1,74 @@
 <!DOCTYPE html>
 <html lang="de">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    <title>Live Stream</title>
-    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700&display=swap" rel="stylesheet">
-    <style>
-        /* Grundlegendes Styling für den Body */
-        body {
-            font-family: 'Roboto', sans-serif;
-            margin: 0;
-            padding: 0;
-            background: #0c0c0c;
-            color: white;
-        }
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Mein Livestream</title>
 
-        /* Das Container-Element für den Stream */
-        .container {
-            width: 100%;
-            height: 100vh;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
-        }
+  <!-- Video.js Stylesheet -->
+  <link href="https://vjs.zencdn.net/8.10.0/video-js.css" rel="stylesheet" />
 
-        /* Das Video-Element */
-        .video-container {
-            position: relative;
-            width: 80%;
-            max-width: 1200px;
-            margin-bottom: 20px;
-        }
+  <style>
+    body {
+      margin: 0;
+      background-color: #0e0e0e;
+      font-family: Arial, sans-serif;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      height: 100vh;
+      color: white;
+    }
 
-        video {
-            width: 100%;
-            border-radius: 10px;
-        }
+    h1 {
+      margin-bottom: 20px;
+      font-weight: 600;
+      color: #00d084;
+    }
 
-        /* Der Titel des Streams */
-        .stream-title {
-            text-align: center;
-            font-size: 2rem;
-            margin-top: 20px;
-            font-weight: 500;
-        }
+    .video-container {
+      width: 90%;
+      max-width: 1000px;
+      box-shadow: 0 0 25px rgba(0, 0, 0, 0.6);
+      border-radius: 12px;
+      overflow: hidden;
+    }
 
-        /* Container für die Informationen */
-        .info-container {
-            background: rgba(0, 0, 0, 0.6);
-            padding: 15px 30px;
-            border-radius: 8px;
-            margin-top: 20px;
-        }
+    .video-js {
+      width: 100%;
+      height: auto;
+    }
 
-        /* Button für den Stream */
-        .info-container .btn {
-            padding: 10px 20px;
-            background-color: #ff6f61;
-            color: white;
-            font-weight: bold;
-            border: none;
-            border-radius: 5px;
-            cursor: pointer;
-            font-size: 1rem;
-            text-align: center;
-            display: inline-block;
-        }
-
-        .info-container .btn:hover {
-            background-color: #e65b50;
-        }
-
-        /* Fader-Effekt bei Hover */
-        .video-container:hover {
-            opacity: 0.9;
-            transition: opacity 0.3s ease;
-        }
-
-        /* Responsive Anpassungen */
-        @media (max-width: 768px) {
-            .video-container {
-                width: 100%;
-                margin-bottom: 10px;
-            }
-
-            .stream-title {
-                font-size: 1.5rem;
-            }
-        }
-    </style>
+    footer {
+      margin-top: 20px;
+      font-size: 0.9rem;
+      opacity: 0.7;
+    }
+  </style>
 </head>
 <body>
 
-    <div class="container">
-        <div class="video-container">
-            <video id="stream" controls autoplay>
-                <source src="http://79.220.200.96/hls/stream.m3u8" type="application/x-mpegURL">
-                Dein Browser unterstützt das Videoformat nicht.
-            </video>
-        </div>
+  <h1>🔴 Mein Livestream</h1>
 
-        <div class="stream-title">
-            <h1>Mein Live Stream</h1>
-            <p>Willkommen zu meinem Stream! Genieß die Show.</p>
-        </div>
+  <div class="video-container">
+    <video
+      id="my-video"
+      class="video-js vjs-big-play-centered"
+      controls
+      autoplay
+      preload="auto"
+      data-setup="{}">
+      <source src="https://stream.gumlet.io/68af513519535c52ef585892/68af51ab19535c52ef585db2/main.m3u8" type="application/x-mpegURL">
+      Dein Browser unterstützt kein HLS-Streaming.
+    </video>
+  </div>
 
-        <div class="info-container">
-            <p>Du schaust live! Aktuelle Zuschauer: <strong>500+</strong></p>
-            <button class="btn" onclick="window.location.href='https://example.com/donate';">Unterstütze den Stream</button>
-        </div>
-    </div>
+  <footer>
+    © 2025 – Powered by Gumlet & GitHub Pages
+  </footer>
 
+  <!-- Video.js Script -->
+  <script src="https://vjs.zencdn.net/8.10.0/video.min.js"></script>
 </body>
 </html>
