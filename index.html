@@ -51,18 +51,14 @@
 
   <h1>🔴 Mein Livestream</h1>
 
-  <div class="video-container">
-    <video
-      id="my-video"
-      class="video-js vjs-big-play-centered"
-      controls
-      autoplay
-      preload="auto"
-      data-setup="{}">
-      <source src="https://stream.gumlet.io/68af513519535c52ef585892/68af536219535c52ef58704d/main.m3u8" type="application/x-mpegURL">
-      Dein Browser unterstützt kein HLS-Streaming.
-    </video>
-  </div>
+  <div style="position:relative;aspect-ratio:16/9;">
+      <iframe 
+            loading="lazy" title="Gumlet video player"
+            src="https://play.gumlet.io/embed/live/68af536219535c52ef58704d"
+            style="border:none; position: absolute; top: 0; left: 0; height: 100%; width: 100%;"
+          allow="accelerometer; gyroscope; autoplay; encrypted-media; picture-in-picture; fullscreen;">
+          </iframe>
+    </div>
 
   <footer>
     © 2025 – Powered by Gumlet & GitHub Pages
