@@ -1,266 +1,117 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="de">
 <head>
-<meta charset="utf-8" />
-<meta name="viewport" content="width=device-width,initial-scale=1" />
-<title>BastiGHG Live — Echtzeit Player</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Live Stream</title>
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700&display=swap" rel="stylesheet">
+    <style>
+        /* Grundlegendes Styling für den Body */
+        body {
+            font-family: 'Roboto', sans-serif;
+            margin: 0;
+            padding: 0;
+            background: #0c0c0c;
+            color: white;
+        }
 
-<!-- Styling: BastiGHG-inspiriertes Design (Emerald / Neon) -->
-<style>
-  :root{
-    --bg:#071218;
-    --card:#041018;
-    --accent1:#00d3a6; /* emerald */
-    --accent2:#00a3ff; /* cyan */
-    --muted:#98a0a6;
-    --glass: rgba(255,255,255,0.03);
-  }
-  html,body{height:100%;margin:0;font-family:Inter,ui-sans-serif,system-ui,-apple-system,"Segoe UI",Roboto,"Helvetica Neue",Arial;}
-  body{background:linear-gradient(180deg,#03060a 0%,var(--bg) 60%);display:flex;align-items:center;justify-content:center;padding:24px;color:#e6eef0;}
-  .wrap{width:100%;max-width:1200px;}
-  .card{background:linear-gradient(180deg, rgba(255,255,255,0.02), rgba(255,255,255,0.01)); border-radius:14px; padding:16px; box-shadow: 0 8px 30px rgba(2,8,12,0.7); border:1px solid rgba(0,0,0,0.5);}
-  header{display:flex;align-items:center;gap:12px;margin-bottom:10px;}
-  .logo{
-    display:flex;flex-direction:column;justify-content:center;
-  }
-  .brand{
-    font-weight:800;font-size:20px;letter-spacing:0.6px;color:var(--accent1); text-shadow: 0 6px 18px rgba(0,211,166,0.06);
-  }
-  .subtitle{font-size:12px;color:var(--muted); margin-top:2px;}
-  .player-row{display:grid;grid-template-columns:1fr 320px;gap:14px;}
-  @media (max-width:940px){ .player-row{grid-template-columns:1fr;}}
-  .video-wrap{background:var(--card); border-radius:10px; overflow:hidden; position:relative; min-height:360px; display:flex; align-items:center; justify-content:center;}
-  video{width:100%; height:100%; object-fit:cover; display:block; background:black;}
-  .overlay-top{position:absolute;left:12px;top:12px;padding:6px 10px;border-radius:8px;background:linear-gradient(90deg, rgba(0,0,0,0.45), rgba(0,0,0,0.25));backdrop-filter: blur(4px);font-size:13px;}
-  .status{font-weight:700;color:var(--accent1);}
-  .controls{display:flex;gap:8px;align-items:center;padding:10px; justify-content:center;background:linear-gradient(180deg, rgba(255,255,255,0.01), rgba(0,0,0,0.02));}
-  .btn{background:linear-gradient(90deg,var(--accent1),var(--accent2));color:#021018;border:none;padding:8px 12px;border-radius:10px;font-weight:700;cursor:pointer;box-shadow:0 6px 20px rgba(0,163,255,0.06);}
-  .btn.ghost{background:transparent;border:1px solid rgba(255,255,255,0.06);color:var(--muted);box-shadow:none;}
-  .side{display:flex;flex-direction:column;gap:12px;padding:12px;}
-  .card-info{background:var(--glass);padding:12px;border-radius:10px;font-size:14px;color:var(--muted);}
-  .small{font-size:13px;color:var(--muted);}
-  .hint{font-size:13px;color:var(--muted); margin-top:8px;}
-  .footer{margin-top:12px;font-size:13px;color:var(--muted); text-align:center;}
-  .logo-badge{background:linear-gradient(90deg,var(--accent1),var(--accent2)); width:46px;height:46px;border-radius:10px;display:flex;align-items:center;justify-content:center;font-weight:900;color:#021018;}
-  .reconnect{color:#fff;background:linear-gradient(90deg, #ff6b6b, #ff8a5b);}
-</style>
+        /* Das Container-Element für den Stream */
+        .container {
+            width: 100%;
+            height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+        }
+
+        /* Das Video-Element */
+        .video-container {
+            position: relative;
+            width: 80%;
+            max-width: 1200px;
+            margin-bottom: 20px;
+        }
+
+        video {
+            width: 100%;
+            border-radius: 10px;
+        }
+
+        /* Der Titel des Streams */
+        .stream-title {
+            text-align: center;
+            font-size: 2rem;
+            margin-top: 20px;
+            font-weight: 500;
+        }
+
+        /* Container für die Informationen */
+        .info-container {
+            background: rgba(0, 0, 0, 0.6);
+            padding: 15px 30px;
+            border-radius: 8px;
+            margin-top: 20px;
+        }
+
+        /* Button für den Stream */
+        .info-container .btn {
+            padding: 10px 20px;
+            background-color: #ff6f61;
+            color: white;
+            font-weight: bold;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 1rem;
+            text-align: center;
+            display: inline-block;
+        }
+
+        .info-container .btn:hover {
+            background-color: #e65b50;
+        }
+
+        /* Fader-Effekt bei Hover */
+        .video-container:hover {
+            opacity: 0.9;
+            transition: opacity 0.3s ease;
+        }
+
+        /* Responsive Anpassungen */
+        @media (max-width: 768px) {
+            .video-container {
+                width: 100%;
+                margin-bottom: 10px;
+            }
+
+            .stream-title {
+                font-size: 1.5rem;
+            }
+        }
+    </style>
 </head>
 <body>
-  <div class="wrap">
-    <div class="card" role="region" aria-label="BastiGHG Live Player">
-      <header>
-        <div class="logo-badge">BG</div>
-        <div class="logo">
-          <div class="brand">BastiGHG Live</div>
-          <div class="subtitle">Echtzeit-Player — Ultra-low latency (WebRTC)</div>
-        </div>
-      </header>
 
-      <div class="player-row">
-        <!-- VIDEO -->
-        <div>
-          <div class="video-wrap">
-            <div class="overlay-top">Status: <span id="status" class="status">Idle</span></div>
-            <video id="video" autoplay playsinline muted></video>
-          </div>
-
-          <div class="controls" aria-hidden="false">
-            <button id="muteBtn" class="btn ghost">Unmute</button>
-            <button id="fsBtn" class="btn ghost">Fullscreen</button>
-            <button id="reconnectBtn" class="btn reconnect">Reconnect</button>
-          </div>
-
-          <div class="hint small">Hinweis: Server-URL konfigurieren (unten). Für öffentliche Anzeige: nutze <strong>ngrok</strong> und setze die ngrok-HTTPS-URL als SERVER_URL.</div>
+    <div class="container">
+        <div class="video-container">
+            <video id="stream" controls autoplay>
+                <source src="http://79.220.200.96/hls/stream.m3u8" type="application/x-mpegURL">
+                Dein Browser unterstützt das Videoformat nicht.
+            </video>
         </div>
 
-        <!-- SIDE PANEL -->
-        <aside class="side">
-          <div class="card-info">
-            <strong>Verbindungs-Info</strong>
-            <div style="margin-top:8px;">
-              <div><span class="small">Server URL:</span> <code id="serverUrlLabel" style="color:#d6fff0"></code></div>
-              <div style="margin-top:6px;"><span class="small">Letzter Fehler:</span> <span id="lastError" style="color:#ffb3b3">—</span></div>
-            </div>
-          </div>
+        <div class="stream-title">
+            <h1>Mein Live Stream</h1>
+            <p>Willkommen zu meinem Stream! Genieß die Show.</p>
+        </div>
 
-          <div class="card-info">
-            <strong>Schnellstart</strong>
-            <ol style="margin:8px 0 0 16px; color:var(--muted)">
-              <li>Starte <code>obs-webrtc-server</code> auf deinem PC.</li>
-              <li>Öffne OBS → Tools → WebSocket → Passwort eintragen.</li>
-              <li>Start Streaming in OBS.</li>
-              <li>Wenn öffentlich: starte <code>ngrok http 8080</code> und setze die ngrok-URL als Server URL.</li>
-            </ol>
-          </div>
-
-          <div class="card-info">
-            <strong>Einstellungen</strong>
-            <div style="margin-top:8px;">
-              <label class="small">Server URL (https):</label>
-              <input id="serverUrl" type="text" value="https://localhost:8080" style="width:100%; margin-top:6px; padding:8px; border-radius:8px; border:1px solid rgba(255,255,255,0.04); background:transparent; color:inherit;">
-              <button id="applyUrl" class="btn" style="margin-top:8px; width:100%;">Übernehmen & verbinden</button>
-            </div>
-          </div>
-        </aside>
-      </div>
-
-      <div class="footer">Built for BastiGHG — OBS (vanilla) → obs-webrtc-server → GitHub Pages player</div>
+        <div class="info-container">
+            <p>Du schaust live! Aktuelle Zuschauer: <strong>500+</strong></p>
+            <button class="btn" onclick="window.location.href='https://example.com/donate';">Unterstütze den Stream</button>
+        </div>
     </div>
-  </div>
 
-<script>
-/*
-  Professioneller WebRTC-Player für obs-webrtc-server.
-  - Ersetze SERVER_URL (oder trage sie im UI ein).
-  - Für öffentliche GitHub-Seite: mache obs-webrtc-server öffentlich (z.B. ngrok) und verwende dessen https-URL.
-*/
-
-const videoEl = document.getElementById('video');
-const statusEl = document.getElementById('status');
-const lastErrorEl = document.getElementById('lastError');
-const serverUrlInput = document.getElementById('serverUrl');
-const serverUrlLabel = document.getElementById('serverUrlLabel');
-const applyBtn = document.getElementById('applyUrl');
-const muteBtn = document.getElementById('muteBtn');
-const fsBtn = document.getElementById('fsBtn');
-const reconnectBtn = document.getElementById('reconnectBtn');
-
-let SERVER_URL = serverUrlInput.value.replace(/\/$/, '');
-serverUrlLabel.textContent = SERVER_URL;
-
-let pc = null;
-let reconnectTimer = null;
-let reconnectDelay = 1000;
-let isMuted = true;
-
-function setStatus(s, color) {
-  statusEl.textContent = s;
-  if(color) statusEl.style.color = color;
-  else statusEl.style.color = '';
-}
-
-function setLastError(msg) {
-  lastErrorEl.textContent = msg || '—';
-}
-
-muteBtn.addEventListener('click', () => {
-  isMuted = !isMuted;
-  videoEl.muted = isMuted;
-  muteBtn.textContent = isMuted ? 'Unmute' : 'Mute';
-});
-
-fsBtn.addEventListener('click', async () => {
-  if(document.fullscreenElement) await document.exitFullscreen();
-  else await document.documentElement.requestFullscreen();
-});
-
-applyBtn.addEventListener('click', () => {
-  SERVER_URL = serverUrlInput.value.replace(/\/$/, '');
-  serverUrlLabel.textContent = SERVER_URL;
-  stopAndCleanup();
-  delayedConnect(200);
-});
-
-reconnectBtn.addEventListener('click', () => {
-  stopAndCleanup();
-  delayedConnect(200);
-});
-
-/* start connection with small backoff on failure */
-function delayedConnect(ms = 0) {
-  clearTimeout(reconnectTimer);
-  reconnectTimer = setTimeout(() => {
-    reconnectDelay = 1000; // reset incremental delay
-    startWebRTC();
-  }, ms);
-}
-
-async function startWebRTC() {
-  setStatus('Connecting...', 'var(--muted)');
-  setLastError('');
-  try {
-    pc = new RTCPeerConnection({
-      iceServers: [{urls: ['stun:stun.l.google.com:19302']}]
-    });
-
-    pc.ontrack = (evt) => {
-      videoEl.srcObject = evt.streams[0];
-      videoEl.muted = isMuted;
-    };
-
-    pc.onconnectionstatechange = () => {
-      console.log('pc state', pc.connectionState);
-      if(pc.connectionState === 'connected') {
-        setStatus('Live', 'var(--accent1)');
-      } else if(pc.connectionState === 'connecting') {
-        setStatus('Connecting...', 'var(--muted)');
-      } else if(pc.connectionState === 'failed' || pc.connectionState === 'disconnected') {
-        setStatus('Disconnected', '#ff6b6b');
-        scheduleReconnect();
-      }
-    };
-
-    // fetch offer from server
-    const offerResp = await fetch(`${SERVER_URL}/offer`, { method: 'POST' , mode: 'cors' });
-    if(!offerResp.ok) throw new Error('Server /offer antwortete mit ' + offerResp.status);
-    const offerJson = await offerResp.json();
-
-    // obs-webrtc-server: sometimes returns the offer directly or wrapped
-    let offer = offerJson;
-    if(offerJson.offer) offer = offerJson.offer;
-    if(offerJson.sdp && offerJson.type) offer = offerJson;
-
-    await pc.setRemoteDescription(new RTCSessionDescription(offer));
-
-    // create local answer and send it
-    const answer = await pc.createAnswer();
-    await pc.setLocalDescription(answer);
-
-    // send back
-    await fetch(`${SERVER_URL}/answer`, {
-      method:'POST',
-      headers: {'Content-Type':'application/json'},
-      body: JSON.stringify({ answer: pc.localDescription })
-    });
-
-    setStatus('Negotiating...', 'var(--muted)');
-
-  } catch (err) {
-    console.error('StartWebRTC error:', err);
-    setLastError(String(err));
-    setStatus('Error', '#ff8b8b');
-    scheduleReconnect();
-  }
-}
-
-function scheduleReconnect() {
-  stopAndCleanup();
-  const maxDelay = 20000;
-  reconnectDelay = Math.min(Math.max(reconnectDelay * 1.8, 1000), maxDelay);
-  const jitter = Math.floor(Math.random() * 400);
-  const delay = reconnectDelay + jitter;
-  console.info('Reconnecting in', delay);
-  setLastError('Reconnecting in ' + Math.round(delay/1000) + 's');
-  reconnectTimer = setTimeout(() => startWebRTC(), delay);
-}
-
-function stopAndCleanup() {
-  try {
-    if(pc) {
-      pc.getSenders().forEach(s => { try{ s.track && s.track.stop(); }catch(e){} });
-      pc.close();
-    }
-  } catch(e){}
-  pc = null;
-  videoEl.srcObject = null;
-  setStatus('Idle');
-}
-
-window.addEventListener('beforeunload', () => stopAndCleanup());
-
-/* Try to connect immediately */
-delayedConnect(300);
-
-</script>
 </body>
 </html>
